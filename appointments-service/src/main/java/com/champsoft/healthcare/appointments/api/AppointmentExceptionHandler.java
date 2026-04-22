@@ -1,5 +1,6 @@
 package com.champsoft.healthcare.appointments.api;
 
+import com.champsoft.healthcare.appointments.application.exceptions.CrossContextValidationException;
 import com.champsoft.healthcare.appointments.domain.exception.AppointmentNotFoundException;
 import com.champsoft.healthcare.appointments.domain.exception.DoctorNotFoundException;
 import com.champsoft.healthcare.appointments.domain.exception.TimeSlotConflictException;
@@ -13,21 +14,27 @@ import java.time.Instant;
 
 public class AppointmentExceptionHandler {
 
-        @ExceptionHandler(AppointmentNotFoundException.class)
-        public ResponseEntity<ApiErrorResponse> handleNotFound(
-                AppointmentNotFoundException ex,
-                HttpServletRequest req
-        ) {
-            return build(HttpStatus.NOT_FOUND, ex, req);
-        }
+//        @ExceptionHandler(AppointmentNotFoundException.class)
+//        public ResponseEntity<ApiErrorResponse> handleNotFound(
+//                AppointmentNotFoundException ex,
+//                HttpServletRequest req
+//        ) {
+//            return build(HttpStatus.NOT_FOUND, ex, req);
+//        }
+//
+//        @ExceptionHandler(DoctorNotFoundException.class)
+//        public ResponseEntity<ApiErrorResponse> handleDoctor(
+//                DoctorNotFoundException ex,
+//                HttpServletRequest req
+//        ) {
+//            return build(HttpStatus.BAD_REQUEST, ex, req);
+//        }
 
-        @ExceptionHandler(DoctorNotFoundException.class)
-        public ResponseEntity<ApiErrorResponse> handleDoctor(
-                DoctorNotFoundException ex,
-                HttpServletRequest req
-        ) {
-            return build(HttpStatus.BAD_REQUEST, ex, req);
-        }
+    @ExceptionHandler(CrossContextValidationException.class)
+    public ResponseEntity<ApiErrorResponse> unprocessable(CrossContextValidationException ex, HttpServletRequest req){
+        return build(HttpStatus.CONFLICT,ex,req);
+    }
+
 
         @ExceptionHandler(TimeSlotConflictException.class)
         public ResponseEntity<ApiErrorResponse> handleConflict(

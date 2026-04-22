@@ -11,7 +11,7 @@ public class OpenApiGroupsConfig {
     GroupedOpenApi billingsApi() {
         return GroupedOpenApi.builder()
                 .group("billings").
-                pathsToMatch("/api/billings/**")
+                pathsToMatch("/api/billing/**")
                 .build();
     }
 

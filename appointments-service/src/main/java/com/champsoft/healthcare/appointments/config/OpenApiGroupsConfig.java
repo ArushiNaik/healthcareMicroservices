@@ -10,8 +10,8 @@ public class OpenApiGroupsConfig {
     @Bean
     GroupedOpenApi appointmentsApi() {
         return GroupedOpenApi.builder()
-                .group("agents").
-                pathsToMatch("/api/agents/**")
+                .group("appointments").
+                pathsToMatch("/api/appointments/**")
                 .build();
     }
 

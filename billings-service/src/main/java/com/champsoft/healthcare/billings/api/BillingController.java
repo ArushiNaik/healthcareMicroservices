@@ -4,6 +4,7 @@ import com.champsoft.healthcare.billings.api.dto.CreateBillingRequest;
 import com.champsoft.healthcare.billings.api.dto.UpdateBillingRequest;
 import com.champsoft.healthcare.billings.api.mapper.BillingApiMapper;
 import com.champsoft.healthcare.billings.application.service.BillingCrudService;
+import com.champsoft.healthcare.billings.application.service.BillingEligibilityService;
 import com.champsoft.healthcare.billings.domain.model.DueDate;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class BillingController {
 
     private final BillingCrudService service;
+    private final BillingEligibilityService eligibilityService;
 
-    public BillingController(BillingCrudService service) {
+
+    public BillingController(BillingCrudService service, BillingEligibilityService eligibilityService) {
         this.service = service;
+        this.eligibilityService= eligibilityService;
     }
 
     @PostMapping
@@ -64,6 +68,8 @@ public class BillingController {
         var billing = service.refunded(id);
         return ResponseEntity.ok(BillingApiMapper.toResponse(billing));
     }
-
-
+    @GetMapping("/{id}/eligibility")
+    public ResponseEntity<Boolean> isEligible(@PathVariable String id){
+        return ResponseEntity.ok(eligibilityService.isEligibleForRefund(id));
+    }
 }

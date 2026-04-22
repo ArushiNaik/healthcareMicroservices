@@ -56,7 +56,7 @@ public class AppointmentOrchestrator {
         Appointment appt = getById(id);
         appt.complete();
         repository.save(appt);
-        billingPort.createBill(appt.id().value(), appt.patientIdValue());
+       // billingPort.createBill(appt.id().value(), appt.patientIdValue());
 
         return appt;
     }

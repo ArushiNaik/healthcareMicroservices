@@ -1,4 +1,4 @@
-package com.champsoft.healthcare.appointments.config;
+package com.champsoft.healthcare.gateway.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -9,14 +9,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
-
     @Bean
-    public OpenAPI appointmentsServiceOpenAPI() {
+    public OpenAPI gatewayOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Appointments Service API")
+                        .title("Healthcare API Gateway")
                         .version("1.0.0")
-                        .description("Appointments Management System - REST API")
+                        .description("Single entry point for the Healthcare Appointment Management System microservices")
                         .contact(new Contact().name("VRMS Team").email("n/a"))
                         .license(new License().name("Apache 2.0")));
     }

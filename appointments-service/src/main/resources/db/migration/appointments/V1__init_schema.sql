@@ -15,3 +15,7 @@ INSERT INTO appointment (id, doctor_id, patient_id, billing_id, time, status) VA
                                                                                   ('a3','33333333-3333-3333-3333-333333333333','p3','b3','2026-04-12 09:30:00','COMPLETED'),
                                                                                   ('a4','44444444-4444-4444-4444-444444444444','p4','b4','2026-04-13 14:00:00','CANCELLED'),
                                                                                   ('a5','55555555-5555-5555-5555-555555555555','p5','b5','2026-04-14 16:00:00','SCHEDULED');
+UPDATE appointment
+SET
+    status = 'SCHEDULED',
+    time = DATEADD('MONTH', 3, time);

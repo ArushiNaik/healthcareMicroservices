@@ -4,9 +4,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-/**
- * Represents a recurring availability slot for a doctor.
- */
 public record DoctorAvailability(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
 
     public DoctorAvailability {

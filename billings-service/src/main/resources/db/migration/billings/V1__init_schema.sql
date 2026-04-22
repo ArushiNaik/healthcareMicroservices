@@ -17,4 +17,11 @@ INSERT INTO billing (id, appointment_id, patient_id, amount, description, due_da
                                                                                                                 ('b2','a2','p2',200.0,'Cardio check','2026-04-21','CREDIT_CARD','PAID'),
                                                                                                                 ('b3','a3','p3',180.0,'Neuro exam','2026-04-22','INSURANCE','PENDING'),
                                                                                                                 ('b4','a4','p4',120.0,'Consultation','2026-04-23','CASH','PENDING'),
-                                                                                                                ('b5','a5','p5',150.0,'General checkup','2026-04-24','CREDIT_CARD','PENDING');
+                                                                                                            ('b5','a5','p5',150.0,'General checkup','2026-04-24','CREDIT_CARD','PENDING');
+
+
+UPDATE billing
+SET due_date = DATEADD('MONTH', 2, due_date);
+ALTER TABLE billing DROP COLUMN appointment_id;
+ALTER TABLE billing DROP COLUMN patient_id;
+

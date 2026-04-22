@@ -3,6 +3,7 @@ package com.champsoft.healthcare.doctors.api;
 import com.champsoft.healthcare.doctors.api.dto.*;
 import com.champsoft.healthcare.doctors.api.mapper.DoctorDtoMapper;
 import com.champsoft.healthcare.doctors.application.service.DoctorCrudService;
+import com.champsoft.healthcare.doctors.application.service.DoctorEligibilityService;
 import com.champsoft.healthcare.doctors.domain.model.Doctor;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,11 @@ import java.util.stream.Collectors;
 public class DoctorController {
 
     private final DoctorCrudService service;
+    private final DoctorEligibilityService eligibilityService;
 
-    public DoctorController(DoctorCrudService service) {
+    public DoctorController(DoctorCrudService service, DoctorEligibilityService eligibilityService) {
         this.service = service;
+        this.eligibilityService=eligibilityService;
     }
 
     @PostMapping
@@ -77,5 +80,9 @@ public class DoctorController {
     public ResponseEntity<?> delete(@PathVariable String id) {
         service.delete(UUID.fromString(id));
         return ResponseEntity.ok("Doctor deleted");
+    }
+    @GetMapping("/{id}/eligibility")
+    public ResponseEntity<Boolean> isEligible(@PathVariable String id){
+        return ResponseEntity.ok(eligibilityService.isEligible(id));
     }
 }

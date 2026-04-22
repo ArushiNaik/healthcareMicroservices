@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-@Component
+@Component("billingRepositoryPort")
 public class JpaBillingRepositoryAdapter implements BillingRepositoryPort {
 
     private final SpringDataBillingRepository repo;

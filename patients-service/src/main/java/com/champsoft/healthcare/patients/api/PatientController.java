@@ -3,6 +3,7 @@ package com.champsoft.healthcare.patients.api;
 import com.champsoft.healthcare.patients.api.dto.*;
 import com.champsoft.healthcare.patients.api.mapper.PatientApiMapper;
 import com.champsoft.healthcare.patients.application.service.PatientCrudService;
+import com.champsoft.healthcare.patients.application.service.PatientEligibilityService;
 import com.champsoft.healthcare.patients.domain.model.*;
 
 import jakarta.validation.Valid;
@@ -16,9 +17,11 @@ import java.util.List;
 public class PatientController {
 
     private final PatientCrudService service;
+    private final PatientEligibilityService eligibilityService;
 
-    public PatientController(PatientCrudService service){
+    public PatientController(PatientCrudService service, PatientEligibilityService patientEligibilityService){
         this.service=service;
+        this.eligibilityService = patientEligibilityService;
     }
 
     @PostMapping
@@ -62,5 +65,10 @@ public class PatientController {
     public ResponseEntity<?> status(@PathVariable String id, @PathVariable PatientStatus status){
         var patient = service.changeStatus(id,status);
         return ResponseEntity.ok(PatientApiMapper.toResponse(patient));
+    }
+
+    @GetMapping("/{id}/eligibility")
+    public ResponseEntity<Boolean> isEligible(@PathVariable String id){
+        return ResponseEntity.ok(eligibilityService.isEligibleForAppointment(id));
     }
 }
