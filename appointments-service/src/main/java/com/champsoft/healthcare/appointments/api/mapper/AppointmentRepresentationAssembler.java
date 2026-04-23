@@ -1,41 +1,66 @@
 package com.champsoft.healthcare.appointments.api.mapper;
 
+import com.champsoft.healthcare.appointments.api.AppointmentController;
 import com.champsoft.healthcare.appointments.api.dto.AppointmentResponse;
 import com.champsoft.healthcare.appointments.domain.model.Appointment;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import com.champsoft.healthcare.appointments.api.AppointmentController;
-
+@Component
 public class AppointmentRepresentationAssembler {
 
-    public static EntityModel<AppointmentResponse> toModel(Appointment a) {
+    public EntityModel<AppointmentResponse> toModel(Appointment entity) {
 
-        AppointmentResponse r = new AppointmentResponse();
+        AppointmentResponse response =
+                AppointmentRepresentationMapper.toResponse(entity);
 
-        r.id = a.id().value();
-        r.doctorId = a.doctorId().value();
-        r.patientId = a.patientId().value();
-        r.billingId = a.getBillingRef().value();
-        r.status = a.status().name();
-        r.time = a.time().value();
+        String id = entity.id().value();
 
-        return EntityModel.of(r,
+        return EntityModel.of(response,
                 linkTo(methodOn(AppointmentController.class)
-                        .getById(r.id)).withSelfRel(),
+                        .getById(id))
+                        .withSelfRel(),
 
                 linkTo(methodOn(AppointmentController.class)
-                        .getAll()).withRel("all-appointments"),
+                        .getAll())
+                        .withRel("all-appointments"),
 
                 linkTo(methodOn(AppointmentController.class)
-                        .delete(r.id)).withRel("delete"),
+                        .delete(id))
+                        .withRel("delete"),
+
+                Link.of("/api/appointments/" + id + "/reschedule")
+                        .withRel("reschedule"),
 
                 linkTo(methodOn(AppointmentController.class)
-                        .reschedule(r.id, null)).withRel("reschedule"),
+                        .complete(id))
+                        .withRel("complete")
+        );
+    }
 
+    public CollectionModel<EntityModel<AppointmentResponse>> toCollection(
+            List<Appointment> appointments
+    ) {
+        var models = appointments.stream()
+                .map(this::toModel)
+                .toList();
+
+        return CollectionModel.of(models,
+                linkTo(methodOn(AppointmentController.class).getAll()).withSelfRel()
+        );
+    }
+
+    public EntityModel<Void> deletionResponse(String id) {
+        return EntityModel.of(null,
                 linkTo(methodOn(AppointmentController.class)
-                        .complete(r.id)).withRel("complete")
+                        .getAll())
+                        .withRel("all-appointments")
         );
     }
 }
