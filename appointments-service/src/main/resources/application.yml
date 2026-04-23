@@ -24,6 +24,7 @@ springdoc:
    path: /swagger-ui.html
    operationsSorter: method
    tagsSorter: alpha
+  enable-hateoas: false
 
 logging:
   level:

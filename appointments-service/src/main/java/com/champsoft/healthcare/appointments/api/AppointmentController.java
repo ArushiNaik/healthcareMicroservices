@@ -3,9 +3,15 @@ package com.champsoft.healthcare.appointments.api;
 import com.champsoft.healthcare.appointments.api.dto.*;
 import com.champsoft.healthcare.appointments.api.mapper.AppointmentRepresentationAssembler;
 import com.champsoft.healthcare.appointments.application.service.AppointmentOrchestrator;
+
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 
 @RestController
 @RequestMapping("/api/appointments")
@@ -18,51 +24,61 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public AppointmentResponse create(@RequestBody CreateAppointmentRequest req) {
-        return AppointmentRepresentationAssembler.toResponse(
-                orchestrator.create(req.doctorId, req.patientId, req.billingId,req.time)
+    public EntityModel<AppointmentResponse> create(@RequestBody CreateAppointmentRequest req) {
+        return AppointmentRepresentationAssembler.toModel(
+                orchestrator.create(req.doctorId, req.patientId, req.billingId, req.time)
         );
     }
 
     @GetMapping
-    public List<AppointmentResponse> getAll() {
-        return orchestrator.getAll().stream()
-                .map(AppointmentRepresentationAssembler::toResponse)
+    public CollectionModel<EntityModel<AppointmentResponse>> getAll() {
+
+        var list = orchestrator.getAll().stream()
+                .map(AppointmentRepresentationAssembler::toModel)
                 .toList();
+
+        return CollectionModel.of(list);
     }
 
     @GetMapping("/{id}")
-    public AppointmentResponse getById(@PathVariable String id) {
-        return AppointmentRepresentationAssembler.toResponse(orchestrator.getById(id));
+    public EntityModel<AppointmentResponse> getById(@PathVariable String id) {
+        return AppointmentRepresentationAssembler.toModel(
+                orchestrator.getById(id)
+        );
     }
-
-
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
+    public EntityModel<Void> delete(@PathVariable String id) {
         orchestrator.delete(id);
+
+        return EntityModel.of(null,
+                linkTo(methodOn(AppointmentController.class).getAll()).withRel("all-appointments")
+        );
     }
 
-
     @PutMapping("/{id}/reschedule")
-    public AppointmentResponse reschedule(@PathVariable String id,
-                                          @RequestBody RescheduleAppointmentRequest req) {
+    public EntityModel<AppointmentResponse> reschedule(
+            @PathVariable String id,
+            @RequestBody RescheduleAppointmentRequest req) {
 
-        return AppointmentRepresentationAssembler.toResponse(
+        return AppointmentRepresentationAssembler.toModel(
                 orchestrator.reschedule(id, req.newTime)
         );
     }
-    @PutMapping("/{id}")
-    public AppointmentResponse update(@PathVariable String id,
-                                      @RequestBody UpdateAppointmentRequest req) {
 
-        return AppointmentRepresentationAssembler.toResponse(
+    @PutMapping("/{id}")
+    public EntityModel<AppointmentResponse> update(
+            @PathVariable String id,
+            @RequestBody UpdateAppointmentRequest req) {
+
+        return AppointmentRepresentationAssembler.toModel(
                 orchestrator.update(id, req)
         );
     }
+
     @PutMapping("/{id}/complete")
-    public AppointmentResponse complete(@PathVariable String id) {
-        return AppointmentRepresentationAssembler.toResponse(
+    public EntityModel<AppointmentResponse> complete(@PathVariable String id) {
+        return AppointmentRepresentationAssembler.toModel(
                 orchestrator.complete(id)
         );
     }
