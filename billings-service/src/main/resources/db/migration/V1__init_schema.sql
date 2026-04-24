@@ -20,8 +20,10 @@ INSERT INTO billing (id, appointment_id, patient_id, amount, description, due_da
                                                                                                             ('b5','a5','p5',150.0,'General checkup','2026-04-24','CREDIT_CARD','PENDING');
 
 
+-- UPDATE billing
+-- SET due_date = due_date + INTERVAL '2 months';
 UPDATE billing
-SET due_date = due_date + INTERVAL '2 months';
+SET due_date = DATEADD('MONTH', 2, due_date);
 ALTER TABLE billing DROP COLUMN appointment_id;
 ALTER TABLE billing DROP COLUMN patient_id;
 
