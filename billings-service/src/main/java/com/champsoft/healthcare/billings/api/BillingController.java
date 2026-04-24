@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/billing")
+@RequestMapping("/api/billings")
 public class BillingController {
 
     private final BillingCrudService service;

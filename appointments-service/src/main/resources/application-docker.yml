@@ -1,0 +1,9 @@
+services:
+  doctors:
+    base-url: http://doctors-service:8080
+
+  patients:
+    base-url: http://patients-service:8080
+
+  billings:
+    base-url: http://billings-service:8080

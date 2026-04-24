@@ -18,4 +18,4 @@ INSERT INTO appointment (id, doctor_id, patient_id, billing_id, time, status) VA
 UPDATE appointment
 SET
     status = 'SCHEDULED',
-    time = DATEADD('MONTH', 3, time);
+    time = time + INTERVAL '3 months';

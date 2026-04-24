@@ -1,0 +1,140 @@
+version: "3.9"
+
+services:
+  # ---------------- DATABASES ----------------
+  doctors-db:
+    image: postgres:18.3
+    container_name: doctors-db
+    environment:
+      POSTGRES_DB: doctors_db
+      POSTGRES_USER: vrms
+      POSTGRES_PASSWORD: vrms
+    ports:
+      - "5433:5432"
+    volumes:
+      - doctors_pg_data:/var/lib/postgresql
+
+  patients-db:
+    image: postgres:18.3
+    container_name: patients-db
+    environment:
+      POSTGRES_DB: patients_db
+      POSTGRES_USER: vrms
+      POSTGRES_PASSWORD: vrms
+    ports:
+      - "5434:5432"
+    volumes:
+      - patients_pg_data:/var/lib/postgresql
+
+  billings-db:
+    image: postgres:18.3
+    container_name: billings-db
+    environment:
+      POSTGRES_DB: billings_db
+      POSTGRES_USER: vrms
+      POSTGRES_PASSWORD: vrms
+    ports:
+      - "5435:5432"
+    volumes:
+      - billings_pg_data:/var/lib/postgresql
+
+  appointments-db:
+    image: postgres:18.3
+    container_name: appointments-db
+    environment:
+      POSTGRES_DB: appointments_db
+      POSTGRES_USER: vrms
+      POSTGRES_PASSWORD: vrms
+    ports:
+      - "5436:5432"
+    volumes:
+      - appointments_pg_data:/var/lib/postgresql
+
+  # ---------------- SERVICES ----------------
+  doctors-service:
+    build: ./doctors-service
+    container_name: doctors-service
+    environment:
+      SPRING_PROFILES_ACTIVE: pg
+      POSTGRES_HOST: doctors-db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: doctors_db
+      POSTGRES_USER: vrms
+      POSTGRES_PASSWORD: vrms
+      SERVER_PORT: 8080
+    depends_on:
+      - doctors-db
+    ports:
+      - "8081:8080"
+
+  patients-service:
+    build: ./patients-service
+    container_name: patients-service
+    environment:
+      SPRING_PROFILES_ACTIVE: pg
+      POSTGRES_HOST: patients-db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: patients_db
+      POSTGRES_USER: vrms
+      POSTGRES_PASSWORD: vrms
+      SERVER_PORT: 8080
+    depends_on:
+      - patients-db
+    ports:
+      - "8082:8080"
+
+  billings-service:
+    build: ./billings-service
+    container_name: billings-service
+    environment:
+      SPRING_PROFILES_ACTIVE: pg
+      POSTGRES_HOST: billings-db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: billings_db
+      POSTGRES_USER: vrms
+      POSTGRES_PASSWORD: vrms
+      SERVER_PORT: 8080
+    depends_on:
+      - billings-db
+    ports:
+      - "8083:8080"
+
+  appointments-service:
+    build: ./appointments-service
+    container_name: appointments-service
+    environment:
+      SPRING_PROFILES_ACTIVE: pg,docker
+      POSTGRES_HOST: appointments-db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: appointments_db
+      POSTGRES_USER: vrms
+      POSTGRES_PASSWORD: vrms
+      SERVER_PORT: 8080
+    depends_on:
+      - appointments-db
+      - doctors-service
+      - patients-service
+      - billings-service
+    ports:
+      - "8084:8080"
+
+  # ---------------- API GATEWAY ----------------
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SERVER_PORT: 8080
+    depends_on:
+      - doctors-service
+      - patients-service
+      - billings-service
+      - appointments-service
+    ports:
+      - "8080:8080"
+
+volumes:
+  doctors_pg_data:
+  patients_pg_data:
+  billings_pg_data:
+  appointments_pg_data:

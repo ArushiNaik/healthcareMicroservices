@@ -1,0 +1,38 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: doctors-service
+              uri: http://doctors-service:8080
+              predicates:
+                - Path=/api/doctors/**
+            - id: patients-service
+              uri: http://patients-service:8080
+              predicates:
+                - Path=/api/patients/**
+            - id: billings-service
+              uri: http://billings-service:8080
+              predicates:
+                - Path=/api/billings/**
+            - id: appointments-service
+              uri: http://appointments-service:8080
+              predicates:
+                - Path=/api/appointments/**
+
+server:
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: doctors-service
+        url: http://localhost:8081/v3/api-docs
+      - name: patients-service
+        url: http://localhost:8082/v3/api-docs
+      - name: billings-service
+        url: http://localhost:8083/v3/api-docs
+      - name: appointments-service
+        url: http://localhost:8084/v3/api-docs
