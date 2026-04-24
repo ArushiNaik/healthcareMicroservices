@@ -1,4 +1,4 @@
-package com.champsoft.healthcare.doctors.domain.exception;
+package com.champsoft.healthcare.doctors.application.exception;
 
 public class DoctorNotFoundException extends RuntimeException{
     public DoctorNotFoundException(String message) {

@@ -2,13 +2,15 @@ package com.champsoft.healthcare.patients.application.service;
 
 import com.champsoft.healthcare.patients.application.exception.DuplicatePatientException;
 import com.champsoft.healthcare.patients.application.port.out.PatientRepositoryPort;
-import com.champsoft.healthcare.patients.domain.exception.PatientNotFoundException;
+import com.champsoft.healthcare.patients.application.exception.PatientNotFoundException;
+import com.champsoft.healthcare.patients.domain.exception.PatientEligibilityAppointmentException;
 import com.champsoft.healthcare.patients.domain.model.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Service
@@ -22,8 +24,11 @@ public class PatientCrudService {
 
     @Transactional
     public Patient create(String firstName, String lastName, String phoneNumber, String email, LocalDate dateOfBirth, HealthInsuranceCard insuranceCard, Address address, PatientStatus status){
+        if (Period.between(dateOfBirth, LocalDate.now()).getYears() < 18) {
+            throw new PatientEligibilityAppointmentException("Patient must be 18 or older to be registered");
+        }
         HealthInsuranceCard h = new HealthInsuranceCard(insuranceCard.insuranceCardNumber(),insuranceCard.getExpiryDate());
-        if(repo.existByInsuranceCard(h.insuranceCardNumber())) throw new DuplicatePatientException("Patient already exists");
+        if(repo.existsByInsuranceCard(insuranceCard.insuranceCardNumber())) throw new DuplicatePatientException("Patient already exists");
         Address address1 = new Address(address.getStreetNumber(),address.getStreetName(), address.getCity(),address.getPostalCode(), address.getCountry());
         var patient = new Patient(PatientId.newId(),firstName,lastName,phoneNumber,email,dateOfBirth,h,address1,status);
 

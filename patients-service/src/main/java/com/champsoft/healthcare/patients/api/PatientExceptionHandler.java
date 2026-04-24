@@ -1,6 +1,7 @@
 package com.champsoft.healthcare.patients.api;
 
 import com.champsoft.healthcare.patients.application.exception.DuplicatePatientException;
+import com.champsoft.healthcare.patients.application.exception.PatientNotFoundException;
 import com.champsoft.healthcare.patients.domain.exception.*;
 import com.champsoft.healthcare.patients.web.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,10 @@ public class PatientExceptionHandler {
     @ExceptionHandler(DuplicatePatientException.class)
     public ResponseEntity<ApiErrorResponse> conflict(DuplicatePatientException ex, HttpServletRequest req){
         return build(HttpStatus.CONFLICT,ex,req);
+    }
+    @ExceptionHandler(PatientStatusException.class)
+    public ResponseEntity<String> handlePatientStatusException(PatientStatusException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     private ResponseEntity<ApiErrorResponse> build(HttpStatus status, Exception ex, HttpServletRequest req){

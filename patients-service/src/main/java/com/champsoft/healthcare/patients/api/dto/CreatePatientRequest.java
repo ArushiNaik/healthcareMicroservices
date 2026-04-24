@@ -15,10 +15,10 @@ public record CreatePatientRequest(
         @Past LocalDate dateOfBirth,
         @NotBlank String healthCardNum,
         @NotNull LocalDate expiryDate,
-        @NotNull Integer streetNumber,
-        @NotBlank String streetName,
-        @NotBlank String city,
-        @NotBlank String postalCode,
-        @NotBlank String Country
+         Integer streetNumber,
+         String streetName,
+       String city,
+         String postalCode,
+         String Country
 ) {
 }

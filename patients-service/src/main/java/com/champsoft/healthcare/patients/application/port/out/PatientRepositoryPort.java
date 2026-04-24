@@ -19,7 +19,7 @@ public interface PatientRepositoryPort {
     void deleteById(PatientId patientId);
 
     boolean existsById(PatientId patientId);
-    boolean existByInsuranceCard(String cardNumber);
+    boolean existsByInsuranceCard(String cardNumber);
 
 
 }

@@ -8,6 +8,7 @@ public interface SpringDataPatientRepository extends JpaRepository<PatientJpaEnt
 
     Optional<PatientJpaEntity> findById(String id);
     boolean existsById(String id);
+    boolean existsByInsuranceCardHealthCardNum(String healthCardNum);
 
 
 }

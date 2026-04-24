@@ -2,6 +2,7 @@ package com.champsoft.healthcare.patients.domain.model;
 
 import com.champsoft.healthcare.patients.domain.exception.ExpiredHealthInsuranceCardException;
 import com.champsoft.healthcare.patients.domain.exception.InvalidInsuranceCardNumber;
+import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
+@Embeddable
 public class HealthInsuranceCard {
 
     private String healthCardNum;

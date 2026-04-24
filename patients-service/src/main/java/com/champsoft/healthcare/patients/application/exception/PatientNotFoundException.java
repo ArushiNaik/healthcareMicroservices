@@ -1,4 +1,4 @@
-package com.champsoft.healthcare.patients.domain.exception;
+package com.champsoft.healthcare.patients.application.exception;
 
 public class PatientNotFoundException extends RuntimeException {
     public PatientNotFoundException(String message) {

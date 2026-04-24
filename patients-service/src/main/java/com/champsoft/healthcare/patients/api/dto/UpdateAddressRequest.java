@@ -4,11 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record UpdateAddressRequest (
-        @NotBlank String id,
-        @NotNull Integer streetNumber,
-        @NotBlank String streetName,
-        @NotBlank String city,
-        @NotBlank String postalCode,
-        @NotBlank String Country
+         String id,
+        Integer streetNumber,
+         String streetName,
+        String city,
+        String postalCode,
+         String Country
 ){
 }

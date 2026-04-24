@@ -2,7 +2,7 @@ package com.champsoft.healthcare.doctors.api;
 
 
 import com.champsoft.healthcare.doctors.domain.exception.DoctorLicenseExpiredException;
-import com.champsoft.healthcare.doctors.domain.exception.DoctorNotFoundException;
+import com.champsoft.healthcare.doctors.application.exception.DoctorNotFoundException;
 import com.champsoft.healthcare.doctors.domain.exception.DuplicateDoctorException;
 import com.champsoft.healthcare.doctors.web.ApiErrorResponse;
 

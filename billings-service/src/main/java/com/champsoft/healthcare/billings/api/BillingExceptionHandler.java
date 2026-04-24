@@ -2,6 +2,7 @@ package com.champsoft.healthcare.billings.api;
 
 import com.champsoft.healthcare.billings.application.exception.BillingNotFoundException;
 import com.champsoft.healthcare.billings.application.exception.DuplicateBillingException;
+import com.champsoft.healthcare.billings.application.exception.InvalidPriceException;
 import com.champsoft.healthcare.billings.domain.exception.InvalidBillingException;
 import com.champsoft.healthcare.billings.domain.exception.InvalidInvoiceItemException;
 import com.champsoft.healthcare.billings.domain.exception.InvalidStatusRefund;
@@ -23,16 +24,17 @@ public class BillingExceptionHandler {
         return build(HttpStatus.NOT_FOUND,ex,req);
     }
 
-    @ExceptionHandler(DuplicateBillingException.class)
-    public ResponseEntity<ApiErrorResponse> conflict(DuplicateBillingException ex, HttpServletRequest req){
-        return build(HttpStatus.CONFLICT,ex,req);
-    }
+//    @ExceptionHandler(DuplicateBillingException.class)
+//    public ResponseEntity<ApiErrorResponse> conflict(DuplicateBillingException ex, HttpServletRequest req){
+//        return build(HttpStatus.CONFLICT,ex,req);
+//    }
 
     @ExceptionHandler({
             InvalidBillingException.class,
             InvalidInvoiceItemException.class,
             IllegalArgumentException.class,
-            InvalidStatusRefund.class
+            InvalidStatusRefund.class,
+            InvalidPriceException.class
     })
     public ResponseEntity<ApiErrorResponse> badRequest(RuntimeException ex, HttpServletRequest req){
         return build(HttpStatus.BAD_REQUEST,ex,req);

@@ -1,5 +1,6 @@
 package com.champsoft.healthcare.patients.application.service;
 
+import com.champsoft.healthcare.patients.application.exception.PatientNotFoundException;
 import com.champsoft.healthcare.patients.application.port.out.PatientRepositoryPort;
 import com.champsoft.healthcare.patients.domain.exception.PatientEligibilityAppointmentException;
 import com.champsoft.healthcare.patients.domain.model.PatientId;
@@ -18,8 +19,14 @@ public class PatientEligibilityService {
     }
 
     @Transactional(readOnly = true)
-    public boolean isEligibleForAppointment(String id){
-        var v= repo.findById(PatientId.of(id)).orElseThrow(()-> new PatientEligibilityAppointmentException("Must be 18 years old and plus to book appointment"));
-        return  v.isEligibleForAppointment();
+    public boolean isEligibleForAppointment(String id) {
+        var patient = repo.findById(PatientId.of(id))
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found with id: " + id));
+
+        if (!patient.isEligibleForAppointment()) {
+            throw new PatientEligibilityAppointmentException("Patient must be 18 or older to book an appointment");
+        }
+
+        return true;
     }
 }

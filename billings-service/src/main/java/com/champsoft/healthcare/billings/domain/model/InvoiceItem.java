@@ -1,5 +1,6 @@
 package com.champsoft.healthcare.billings.domain.model;
 
+import com.champsoft.healthcare.billings.application.exception.InvalidPriceException;
 import com.champsoft.healthcare.billings.domain.exception.InvalidInvoiceItemException;
 
 public class InvoiceItem {
@@ -9,7 +10,7 @@ public class InvoiceItem {
 
     public InvoiceItem(String description, double amount) {
         if(description.isEmpty()) throw new InvalidInvoiceItemException("Description is required");
-        if(amount <=0) throw new InvalidInvoiceItemException("Amount cannot be negative");
+        if(amount <=0) throw new InvalidPriceException("Amount cannot be negative");
         this.description = description;
         this.amount=amount;
     }

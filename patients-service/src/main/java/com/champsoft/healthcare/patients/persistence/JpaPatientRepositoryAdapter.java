@@ -44,9 +44,11 @@ public class JpaPatientRepositoryAdapter implements PatientRepositoryPort {
     }
 
     @Override
-    public boolean existByInsuranceCard(String cardNumber) {
-        return false;
+    public boolean existsByInsuranceCard(String cardNumber) {
+        return jpa.existsByInsuranceCardHealthCardNum(cardNumber);
     }
+
+
 
     private PatientJpaEntity toEntity(Patient p){
         var a = new PatientJpaEntity();
