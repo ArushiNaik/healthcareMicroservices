@@ -4,6 +4,7 @@ package com.champsoft.healthcare.doctors.api;
 import com.champsoft.healthcare.doctors.domain.exception.DoctorLicenseExpiredException;
 import com.champsoft.healthcare.doctors.application.exception.DoctorNotFoundException;
 import com.champsoft.healthcare.doctors.domain.exception.DuplicateDoctorException;
+import com.champsoft.healthcare.doctors.domain.exception.InvalidDoctorException;
 import com.champsoft.healthcare.doctors.web.ApiErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,6 +41,8 @@ public class DoctorExceptionHandler {
 
     @ExceptionHandler({
             DoctorLicenseExpiredException.class,
+            InvalidDoctorException.class
+
     })
     public ResponseEntity<ApiErrorResponse> badRequest(RuntimeException ex, HttpServletRequest req){
         return build(HttpStatus.BAD_REQUEST,ex,req);

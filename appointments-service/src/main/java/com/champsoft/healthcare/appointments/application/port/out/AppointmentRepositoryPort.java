@@ -10,4 +10,5 @@ public interface AppointmentRepositoryPort {
     Optional<Appointment> findById(String id);
     List<Appointment> findAll();
     void deleteById(String id);
+    boolean existsById(String id);
 }

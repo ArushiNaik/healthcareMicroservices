@@ -5,6 +5,8 @@ import com.champsoft.healthcare.appointments.application.port.out.*;
 import com.champsoft.healthcare.appointments.domain.model.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.champsoft.healthcare.appointments.domain.exception.AppointmentNotFoundException;
+import com.champsoft.healthcare.appointments.application.exceptions.CrossContextValidationException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,10 +31,74 @@ public class AppointmentOrchestrator {
         this.billingPort = billingPort;
     }
 
-    public Appointment create(String doctorId, String patientId,String billingId, LocalDateTime time) {
+//    public Appointment create(String doctorId, String patientId,String billingId, LocalDateTime time) {
+//
+//        if (!doctorPort.exists(doctorId)) throw new RuntimeException("Doctor not found");
+//        if (!patientPort.exists(patientId)) throw new RuntimeException("Patient not found");
+//
+//        Appointment appt = new Appointment(
+//                new AppointmentId(UUID.randomUUID().toString()),
+//                new DoctorRef(doctorId),
+//                new PatientRef(patientId),
+//                new BillingRef(billingId),
+//                new AppointmentTime(time)
+//        );
+//
+//        return repository.save(appt);
+//    }
+//
+//    @Transactional(readOnly = true)
+//    public Appointment getById(String id) {
+//        return repository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+//    }
+//    @Transactional
+//    public Appointment complete(String id) {
+//
+//        Appointment appt = getById(id);
+//        appt.complete();
+//        repository.save(appt);
+//       // billingPort.createBill(appt.id().value(), appt.patientIdValue());
+//
+//        return appt;
+//    }
+//
+//    @Transactional(readOnly = true) // ⚡ optimized read
+//    public List<Appointment> getAll() {
+//        return repository.findAll();
+//    }
+//
+//
+//
+//    public void delete(String id) {
+//        repository.deleteById(id);
+//    }
+//
+//    public Appointment reschedule(String id, LocalDateTime newTime) {
+//
+//        Appointment appt = repository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+//
+//        appt.reschedule(new AppointmentTime(newTime));
+//
+//        return repository.save(appt);
+//    }
+//
+//    public Appointment update(String id, UpdateAppointmentRequest req) {
+//
+//        Appointment appt = repository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+//
+//        if (req.time != null) {
+//            appt.reschedule(new AppointmentTime(req.time));
+//        }
+//
+//        return repository.save(appt);
+//    }
 
-        if (!doctorPort.exists(doctorId)) throw new RuntimeException("Doctor not found");
-        if (!patientPort.exists(patientId)) throw new RuntimeException("Patient not found");
+    public Appointment create(String doctorId, String patientId, String billingId, LocalDateTime time) {
+        if (!doctorPort.exists(doctorId)) throw new CrossContextValidationException("Doctor not found: " + doctorId);
+        if (!patientPort.exists(patientId)) throw new CrossContextValidationException("Patient not found: " + patientId);
 
         Appointment appt = new Appointment(
                 new AppointmentId(UUID.randomUUID().toString()),
@@ -41,56 +107,45 @@ public class AppointmentOrchestrator {
                 new BillingRef(billingId),
                 new AppointmentTime(time)
         );
-
         return repository.save(appt);
+    }
+    @Transactional(readOnly = true)
+    public List<Appointment> getAll() {
+        return repository.findAll();
     }
 
     @Transactional(readOnly = true)
     public Appointment getById(String id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found"));
-    }
-    @Transactional
-    public Appointment complete(String id) {
-
-        Appointment appt = getById(id);
-        appt.complete();
-        repository.save(appt);
-       // billingPort.createBill(appt.id().value(), appt.patientIdValue());
-
-        return appt;
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + id));
     }
 
-    @Transactional(readOnly = true) // ⚡ optimized read
-    public List<Appointment> getAll() {
-        return repository.findAll();
-    }
-
-
+//    public Appointment complete(String id) {
+//        Appointment appt = getById(id);
+//        appt.complete();
+//        return repository.save(appt);
+//    }
 
     public void delete(String id) {
+        if (!repository.existsById(id)) {
+            throw new AppointmentNotFoundException("Appointment not found: " + id);
+        }
         repository.deleteById(id);
     }
 
     public Appointment reschedule(String id, LocalDateTime newTime) {
-
         Appointment appt = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found"));
-
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + id));
         appt.reschedule(new AppointmentTime(newTime));
-
         return repository.save(appt);
     }
 
     public Appointment update(String id, UpdateAppointmentRequest req) {
-
         Appointment appt = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found"));
-
+                .orElseThrow(() -> new AppointmentNotFoundException("Appointment not found: " + id));
         if (req.time != null) {
             appt.reschedule(new AppointmentTime(req.time));
         }
-
         return repository.save(appt);
     }
 }

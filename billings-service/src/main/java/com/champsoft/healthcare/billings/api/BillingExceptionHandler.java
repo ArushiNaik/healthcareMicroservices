@@ -5,12 +5,14 @@ import com.champsoft.healthcare.billings.application.exception.DuplicateBillingE
 import com.champsoft.healthcare.billings.application.exception.InvalidPriceException;
 import com.champsoft.healthcare.billings.domain.exception.InvalidBillingException;
 import com.champsoft.healthcare.billings.domain.exception.InvalidInvoiceItemException;
+import com.champsoft.healthcare.billings.domain.exception.InvalidPaymentMethodException;
 import com.champsoft.healthcare.billings.domain.exception.InvalidStatusRefund;
 
 import com.champsoft.healthcare.billings.web.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -28,7 +30,17 @@ public class BillingExceptionHandler {
 //    public ResponseEntity<ApiErrorResponse> conflict(DuplicateBillingException ex, HttpServletRequest req){
 //        return build(HttpStatus.CONFLICT,ex,req);
 //    }
+@ExceptionHandler(HttpMessageNotReadableException.class)
+public ResponseEntity<ApiErrorResponse> handleJsonError(
+        HttpMessageNotReadableException ex,
+        HttpServletRequest req) {
 
+    return build(
+            HttpStatus.BAD_REQUEST,
+            new RuntimeException("Invalid payment method"),
+            req
+    );
+}
     @ExceptionHandler({
             InvalidBillingException.class,
             InvalidInvoiceItemException.class,

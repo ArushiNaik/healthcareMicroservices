@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class BillingEligibilityRestAdapter implements BillingPort {
 
     private final RestTemplate restTemplate;
-    @Value("{services.billing.base-url}")
+    @Value("${services.billing.base-url}")
     private String billingBaseUrl;
 
     public BillingEligibilityRestAdapter(RestTemplate restTemplate) {
@@ -22,7 +22,7 @@ public class BillingEligibilityRestAdapter implements BillingPort {
 
     @Override
     public boolean exists(String billingId) {
-        String url = billingBaseUrl +"/api/billing"+ billingBaseUrl +"/eligibility";
+        String url = billingBaseUrl +"/api/billing/"+ billingId +"/eligibility";
         try{
             Boolean result = restTemplate.getForObject(url, Boolean.class);
             return Boolean.TRUE.equals(result);

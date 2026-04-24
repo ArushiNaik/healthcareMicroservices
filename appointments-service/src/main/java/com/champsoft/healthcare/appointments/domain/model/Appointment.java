@@ -41,12 +41,12 @@ public class Appointment {
     public String patientIdValue() { return patientId.value(); }
     public LocalDateTime timeValue() { return time.value(); }
 
-    public void complete() {
-        if (time.value().isAfter(LocalDateTime.now())){
-            throw new InvalidAppointment("Appointment cannot be completed before date of the appointment");
-        }
-        this.status = AppointmentStatus.COMPLETED;
-    }
+//    public void complete() {
+//        if (time.value().isAfter(LocalDateTime.now())){
+//            throw new InvalidAppointment("Appointment cannot be completed before date of the appointment");
+//        }
+//        this.status = AppointmentStatus.COMPLETED;
+//    }
     public void cancel() { this.status = AppointmentStatus.CANCELLED; }
     public void reschedule(AppointmentTime newTime) {
         if (status != AppointmentStatus.SCHEDULED) {

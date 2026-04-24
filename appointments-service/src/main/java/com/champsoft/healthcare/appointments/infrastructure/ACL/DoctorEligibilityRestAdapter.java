@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 public class DoctorEligibilityRestAdapter implements DoctorEligibilityPort {
 
     private final RestTemplate restTemplate;
-    @Value("{services.doctors.base-url}")
+    @Value("${services.doctors.base-url}")
     private String doctorBaseUrl;
 
     public DoctorEligibilityRestAdapter(RestTemplate restTemplate) {
@@ -20,7 +20,7 @@ public class DoctorEligibilityRestAdapter implements DoctorEligibilityPort {
 
     @Override
     public boolean exists(String doctorId) {
-        String url = doctorBaseUrl +"/api/doctors"+ doctorBaseUrl +"/eligibility";
+        String url = doctorBaseUrl +"/api/doctors/"+ doctorId +"/eligibility";
         try{
             Boolean result = restTemplate.getForObject(url, Boolean.class);
             return Boolean.TRUE.equals(result);

@@ -1,6 +1,7 @@
 package com.champsoft.healthcare.doctors.domain.model;
 
 import com.champsoft.healthcare.doctors.domain.exception.DoctorLicenseExpiredException;
+import com.champsoft.healthcare.doctors.domain.exception.InvalidDoctorException;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -26,8 +27,11 @@ public class Doctor {
                   String specialty,
                   LocalDate licenseExpiryDate) {
 
-        if (id == null || id.isBlank()) throw new IllegalArgumentException("id required");
-        if (licenseExpiryDate == null) throw new IllegalArgumentException("license required");
+        if (id == null || id.isBlank()) throw new InvalidDoctorException("id required");
+        if (licenseExpiryDate == null) throw new InvalidDoctorException("license required");
+        if (licenseExpiryDate.isBefore(LocalDate.now()))
+            throw new DoctorLicenseExpiredException("license is expired");
+
 
         this.id = id;
         this.firstName = firstName;
@@ -44,7 +48,7 @@ public class Doctor {
     }
 
     public void updateLicense(LocalDate expiryDate) {
-        if (expiryDate == null) throw new IllegalArgumentException("expiry required");
+        if (expiryDate == null) throw new DoctorLicenseExpiredException("expiry required");
         this.licenseExpiryDate = expiryDate;
     }
 

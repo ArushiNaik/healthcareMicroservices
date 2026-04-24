@@ -36,12 +36,13 @@ public class AppointmentRepresentationAssembler {
                         .withRel("delete"),
 
                 Link.of("/api/appointments/" + id + "/reschedule")
-                        .withRel("reschedule"),
-
-                linkTo(methodOn(AppointmentController.class)
-                        .complete(id))
-                        .withRel("complete")
-        );
+                        .withRel("reschedule"));
+//                ,
+//
+//                linkTo(methodOn(AppointmentController.class)
+//                        .complete(id))
+//                        .withRel("complete")
+//        );
     }
 
     public CollectionModel<EntityModel<AppointmentResponse>> toCollection(

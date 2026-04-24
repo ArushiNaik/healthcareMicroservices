@@ -12,7 +12,7 @@ public class PatientEligibilityRestAdapter implements PatientEligibilityPort {
 
     private final RestTemplate restTemplate;
 
-    @Value("{services.patients.base-url}")
+    @Value("${services.patients.base-url}")
     private String patientsBaseUrl;
 
     public PatientEligibilityRestAdapter(RestTemplate restTemplate) {
@@ -21,7 +21,7 @@ public class PatientEligibilityRestAdapter implements PatientEligibilityPort {
 
     @Override
     public boolean exists(String patientId) {
-        String url = patientsBaseUrl +"/api/patients"+ patientId +"/eligibility";
+        String url = patientsBaseUrl +"/api/patients/"+ patientId +"/eligibility";
         try{
             Boolean result = restTemplate.getForObject(url, Boolean.class);
             return Boolean.TRUE.equals(result);

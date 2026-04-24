@@ -61,4 +61,9 @@ public class JpaAppointmentRepositoryAdapter implements AppointmentRepositoryPor
     public void deleteById(String id) {
         repo.deleteById(id);
     }
+
+    @Override
+    public boolean existsById(String id) {
+        return repo.existsById(id);
+    }
 }
