@@ -1,6 +1,8 @@
 package com.champsoft.healthcare.doctors.application.service;
 
+import com.champsoft.healthcare.doctors.application.exception.DoctorNotFoundException;
 import com.champsoft.healthcare.doctors.application.port.out.DoctorRepositoryPort;
+import com.champsoft.healthcare.doctors.domain.exception.DoctorLicenseExpiredException;
 import com.champsoft.healthcare.doctors.domain.exception.DuplicateDoctorException;
 import com.champsoft.healthcare.doctors.domain.model.Doctor;
 import org.springframework.stereotype.Service;
@@ -30,11 +32,11 @@ public class DoctorCrudService {
         return repository.findAll();
     }
 
-    @Transactional(readOnly = true)
-    public Doctor getById(String id) {
-        return repository.findById(String.valueOf(id))
-                .orElseThrow(() -> new RuntimeException("Doctor not found: " + id));
-    }
+//    @Transactional(readOnly = true)
+//    public Doctor getById(String id) {
+//        return repository.findById(String.valueOf(id))
+//                .orElseThrow(() -> new RuntimeException("Doctor not found: " + id));
+//    }
 
 
     @Transactional
@@ -46,19 +48,19 @@ public class DoctorCrudService {
     }
 
 
-    @Transactional
-    public Doctor updateLicense(String id, LocalDate expiryDate) {
-
-        Doctor doctor = getById(String.valueOf(id));
-
-        if (expiryDate == null) {
-            throw new RuntimeException("License expiry cannot be null");
-        }
-
-        doctor.updateLicense(expiryDate);
-
-        return repository.save(doctor);
-    }
+//    @Transactional
+//    public Doctor updateLicense(String id, LocalDate expiryDate) {
+//
+//        Doctor doctor = getById(String.valueOf(id));
+//
+//        if (expiryDate == null) {
+//            throw new RuntimeException("License expiry cannot be null");
+//        }
+//
+//        doctor.updateLicense(expiryDate);
+//
+//        return repository.save(doctor);
+//    }
 
 
     @Transactional
@@ -76,10 +78,36 @@ public class DoctorCrudService {
         return repository.save(doctor);
     }
 
+//    @Transactional
+//    public void delete(UUID id) {
+//        if (!repository.existsById(String.valueOf(id))) {
+//            throw new RuntimeException("Doctor not found: " + id);
+//        }
+//        repository.deleteById(String.valueOf(id));
+//    }
+
+    @Transactional(readOnly = true)
+    public Doctor getById(String id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found: " + id));
+    }
+
+    @Transactional
+    public Doctor updateLicense(String id, LocalDate expiryDate) {
+        Doctor doctor = getById(id);
+
+        if (expiryDate == null) {
+            throw new DoctorLicenseExpiredException("License expiry cannot be null");
+        }
+
+        doctor.updateLicense(expiryDate);
+        return repository.save(doctor);
+    }
+
     @Transactional
     public void delete(UUID id) {
         if (!repository.existsById(String.valueOf(id))) {
-            throw new RuntimeException("Doctor not found: " + id);
+            throw new DoctorNotFoundException("Doctor not found: " + id);
         }
         repository.deleteById(String.valueOf(id));
     }
