@@ -29,6 +29,7 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-flyway-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
@@ -45,4 +46,33 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+apply plugin: "jacoco"
+
+jacoco {
+	toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required  = true
+		html.required = true
+		html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					"**/*Application*",
+					"**/*ApplicationTests*",
+					"**/config/**",
+					"**/dto/**"
+			])
+		}))
+	}
+}
+
+test {
+	finalizedBy jacocoTestReport
 }

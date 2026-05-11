@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:appointments-test-db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  # Disable external service URLs so @MockBean replaces them cleanly
+services:
+  doctors:
+    base-url: http://localhost:9999
+  patients:
+    base-url: http://localhost:9998
+  billing:
+    base-url: http://localhost:9997
+
+server:
+  port: 0

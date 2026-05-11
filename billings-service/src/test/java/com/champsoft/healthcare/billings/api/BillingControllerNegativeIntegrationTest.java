@@ -5,7 +5,6 @@ import com.champsoft.healthcare.billings.application.exception.BillingNotFoundEx
 import com.champsoft.healthcare.billings.domain.exception.InvalidStatusRefund;
 import com.champsoft.healthcare.billings.web.ApiErrorResponse;
 import com.champsoft.healthcare.billings.web.GlobalExceptionHandler;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
         import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// Negative integration test → tests invalid API scenarios
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("testing")

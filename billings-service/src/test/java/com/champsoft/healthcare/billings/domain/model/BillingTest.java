@@ -99,7 +99,7 @@ public class BillingTest {
         assertThat(billing.invoice().getAmountItem()).isEqualTo(200.00);
     }
 
-    // ---- InvoiceItem validation ----
+
 
     @Test
     void shouldThrowInvalidInvoiceItemExceptionWhenDescriptionIsEmpty() {

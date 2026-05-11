@@ -19,8 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-// NOTE: BillingId has no equals/hashCode, so we use any(BillingId.class)
-// instead of BillingId.of("x") in all when() stubs.
+
 @ExtendWith(MockitoExtension.class)
 class BillingCrudServiceTest {
 

@@ -42,14 +42,14 @@ class BillingRepositoryIntegrationTest {
     @DisplayName("Should save a billing successfully")
     void shouldSaveBillingSuccessfully() {
 
-        // ------------------- Arrange -------------------
+
         String id = UUID.randomUUID().toString();
         BillingJpaEntity entity = buildEntity(id);
 
-        // ------------------- Act -------------------
+
         BillingJpaEntity saved = repository.save(entity);
 
-        // ------------------- Assert -------------------
+
         assertThat(saved).isNotNull();
         assertThat(saved.getId()).isEqualTo(id);
         assertThat(saved.getDescription()).isEqualTo("Consultation");
