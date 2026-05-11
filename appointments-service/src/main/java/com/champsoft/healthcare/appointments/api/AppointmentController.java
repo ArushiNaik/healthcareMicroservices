@@ -65,7 +65,8 @@ public class AppointmentController {
     public EntityModel<AppointmentResponse> reschedule(
             @PathVariable String id,
             @RequestBody RescheduleAppointmentRequest req
-    ) {
+
+     ) {
         return assembler.toModel(
                 orchestrator.reschedule(id, req.newTime)
         );

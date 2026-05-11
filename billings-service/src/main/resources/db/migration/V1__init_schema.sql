@@ -22,8 +22,11 @@ INSERT INTO billing (id, appointment_id, patient_id, amount, description, due_da
 
 -- UPDATE billing
 -- SET due_date = due_date + INTERVAL '2 months';
+
 UPDATE billing
 SET due_date = DATEADD('MONTH', 2, due_date);
+
 ALTER TABLE billing DROP COLUMN appointment_id;
 ALTER TABLE billing DROP COLUMN patient_id;
+
 

@@ -17,9 +17,7 @@ INSERT INTO appointment (id, doctor_id, patient_id, billing_id, time, status) VA
                                                                                   ('a5','55555555-5555-5555-5555-555555555555','p5','b5','2026-04-14 16:00:00','SCHEDULED');
 
 
--- UPDATE appointment
--- SET time = time + INTERVAL '3 months',
---     status = 'SCHEDULED';
+
 INSERT INTO appointment (id, doctor_id, patient_id, billing_id, time, status)
 VALUES (
            'a6',
@@ -29,7 +27,7 @@ VALUES (
            CURRENT_TIMESTAMP,
            'SCHEDULED'
        );
-
+--h2
 UPDATE appointment
 SET time = DATEADD('MONTH', 3, time),
     status = 'SCHEDULED'
@@ -38,3 +36,13 @@ WHERE id <> 'a6';
 UPDATE appointment
 SET time = DATEADD('MONTH', 3, time),
     status = 'SCHEDULED';
+
+--pg
+-- UPDATE appointment
+-- SET time = time + INTERVAL '3 months',
+--     status = 'SCHEDULED';
+--
+-- UPDATE appointment
+-- SET time = time + INTERVAL '3 months',
+--     status = 'SCHEDULED'
+-- WHERE id <> 'a6';
